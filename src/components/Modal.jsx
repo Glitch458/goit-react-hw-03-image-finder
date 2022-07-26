@@ -10,14 +10,11 @@ class Modal extends Component {
   }
 
   render() {
+    const { closeModal, alt, url } = this.props;
     return (
-      <div
-        className="Overlay"
-        onClick={this.props.closeModal}
-        onKeyDown={this.props.closeModal}
-      >
+      <div className="Overlay" onClick={closeModal} onKeyDown={closeModal}>
         <div className="Modal">
-          <img src={this.props.url} alt={this.props.alt} />
+          <img src={url} alt={alt} />
         </div>
       </div>
     );
