@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import ImageGallery from './ImageGallery';
 import SearchBar from './Searchbar';
-import ImageGalleryItem from './ImageGalleryItem';
 import Modal from './Modal';
 import Button from './Button';
 import { API } from 'services/galleryAPI';
@@ -15,15 +14,25 @@ class App extends Component {
     modalIsOpen: false,
     pageNumber: 1,
     status: 'idle',
+    buttonIsShown: false,
+    itemQuantity: 12,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { searchName, pageNumber } = this.state;
+    const { searchName, pageNumber, itemQuantity } = this.state;
 
     if (prevState.searchName !== searchName) {
       this.setState({ status: 'pending' });
-      API(searchName, pageNumber)
-        .then(gallery => this.setState({ gallery: gallery.hits }))
+      API(searchName, pageNumber, itemQuantity)
+        .then(collection => {
+          this.setState({ gallery: collection.hits });
+          if (collection.total !== collection.totalHits) {
+            this.setState({ buttonIsShown: true });
+          }
+          if (this.state.itemQuantity !== collection.hits.length) {
+            this.setState({ buttonIsShown: false });
+          }
+        })
         .finally(() => {
           this.setState({ status: 'resolve' });
         });
@@ -71,16 +80,12 @@ class App extends Component {
         <SearchBar onSubmit={this.handleFormSubmit} />
         {this.state.status === 'pending' && <Loader />}
         {this.state.status === 'resolve' && (
-          <>
-            <ImageGallery>
-              <ImageGalleryItem
-                gallery={this.state.gallery}
-                handleClick={this.handleClick}
-              />
-            </ImageGallery>
-            <Button loadMore={this.handleLoadMore} />
-          </>
+          <ImageGallery
+            gallery={this.state.gallery}
+            handleClick={this.handleClick}
+          />
         )}
+        {this.state.buttonIsShown && <Button loadMore={this.handleLoadMore} />}
         {this.state.modalIsOpen && (
           <Modal
             url={this.state.largeImg.url}

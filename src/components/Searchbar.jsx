@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 
 const InitialState = {
   searchName: '',
@@ -18,7 +19,6 @@ class SearchBar extends Component {
       return alert('Please, input search name');
     }
     this.props.onSubmit(this.state.searchName);
-    this.setState(InitialState);
   };
 
   render() {
@@ -43,5 +43,9 @@ class SearchBar extends Component {
     );
   }
 }
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default SearchBar;

@@ -1,22 +1,23 @@
-import { Component } from 'react';
+import PropTypes from 'prop-types';
 
-class ImageGalleryItem extends Component {
-  render() {
-    const { gallery, handleClick } = this.props;
-    return gallery.map(image => (
-      <li
-        onClick={() => handleClick(image.largeImageURL, image.tags)}
-        key={image.id}
-        className="imageGalleryItem"
-      >
-        <img
-          className="ImageGalleryItem-image"
-          src={image.webformatURL}
-          alt={image.tags}
-        />
-      </li>
-    ));
-  }
-}
+const ImageGalleryItem = ({ image, handleClick }) => {
+  return (
+    <li
+      onClick={() => handleClick(image.largeImageURL, image.tags)}
+      className="imageGalleryItem"
+    >
+      <img
+        className="ImageGalleryItem-image"
+        src={image.webformatURL}
+        alt={image.tags}
+      />
+    </li>
+  );
+};
+
+ImageGalleryItem.propTypes = {
+  image: PropTypes.object.isRequired,
+  handleClick: PropTypes.func.isRequired,
+};
 
 export default ImageGalleryItem;

@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Modal extends Component {
   componentDidMount() {
@@ -20,5 +21,11 @@ class Modal extends Component {
     );
   }
 }
+
+Modal.propTypes = {
+  closeModal: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
+};
 
 export default Modal;
