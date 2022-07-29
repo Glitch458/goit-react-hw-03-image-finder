@@ -16,7 +16,8 @@ const ImageGallery = ({ gallery, handleClick }) => {
 };
 
 ImageGallery.propTypes = {
-  gallery: PropTypes.array.isRequired,
+  gallery: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number }))
+    .isRequired,
   handleClick: PropTypes.func.isRequired,
 };
 

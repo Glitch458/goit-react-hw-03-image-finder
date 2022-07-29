@@ -16,7 +16,11 @@ const ImageGalleryItem = ({ image, handleClick }) => {
 };
 
 ImageGalleryItem.propTypes = {
-  image: PropTypes.object.isRequired,
+  image: PropTypes.shape({
+    largeImageURL: PropTypes.string,
+    tags: PropTypes.string,
+    webformatURL: PropTypes.string,
+  }).isRequired,
   handleClick: PropTypes.func.isRequired,
 };
 

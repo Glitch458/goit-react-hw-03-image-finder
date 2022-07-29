@@ -16,6 +16,7 @@ class App extends Component {
     status: 'idle',
     buttonIsShown: false,
     itemQuantity: 12,
+    total: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -25,13 +26,13 @@ class App extends Component {
       this.setState({ status: 'pending' });
       API(searchName, pageNumber, itemQuantity)
         .then(collection => {
-          this.setState({ gallery: collection.hits });
-          if (collection.total !== collection.totalHits) {
-            this.setState({ buttonIsShown: true });
-          }
-          if (this.state.itemQuantity !== collection.hits.length) {
-            this.setState({ buttonIsShown: false });
-          }
+          this.setState({ gallery: collection.hits, total: collection.total });
+          // if (collection.total !== collection.totalHits) {
+          //   this.setState({ buttonIsShown: true });
+          // }
+          // if (this.state.itemQuantity !== collection.hits.length) {
+          //   this.setState({ buttonIsShown: false });
+          // }
         })
         .finally(() => {
           this.setState({ status: 'resolve' });
@@ -75,21 +76,21 @@ class App extends Component {
   // }
 
   render() {
+    const { status, gallery, total, modalIsOpen, largeImg } = this.state;
     return (
       <div className="container">
         <SearchBar onSubmit={this.handleFormSubmit} />
-        {this.state.status === 'pending' && <Loader />}
-        {this.state.status === 'resolve' && (
-          <ImageGallery
-            gallery={this.state.gallery}
-            handleClick={this.handleClick}
-          />
+        {status === 'pending' && <Loader />}
+        {status === 'resolve' && (
+          <ImageGallery gallery={gallery} handleClick={this.handleClick} />
         )}
-        {this.state.buttonIsShown && <Button loadMore={this.handleLoadMore} />}
-        {this.state.modalIsOpen && (
+        {gallery.length > 0 && gallery.length <= total && (
+          <Button loadMore={this.handleLoadMore} />
+        )}
+        {modalIsOpen && (
           <Modal
-            url={this.state.largeImg.url}
-            alt={this.state.largeImg.alt}
+            url={largeImg.url}
+            alt={largeImg.alt}
             closeModal={this.closeModal}
           />
         )}
